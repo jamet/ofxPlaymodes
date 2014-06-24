@@ -23,3 +23,8 @@ New Audio overrights according to the current position of the recordPosition var
 New Video Frames however are put on the very end of the buffer and the whole thing is pushed back in time to make room for the new frames. This happens in the VideoBuffer::newVideoFrame(VideoFrame &frame) method. 
 
 The audio and visual buffers are working fundamentaly different in where new content is written into the ring buffer.  
+
+
+As a result I have added my own verion of the VideoBuffer::newVideoFrame(VideoFrame &frame) method which changes the two recording buffers to behave the same but im getting quite a few artefacts sometimes. eg, frames not being properly owerwritten, also the video freezes and doesn't update on screen when recording. 
+
+I feel like its quite close just needs some more attention. 
