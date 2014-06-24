@@ -44,6 +44,7 @@ VideoBuffer::~VideoBuffer() {
 
 }
 
+    /*
 void VideoBuffer::newVideoFrame(VideoFrame & frame){
 	int64_t time = frame.getTimestamp().epochMicroseconds();
 	if(microsOneSec==-1) microsOneSec=time;
@@ -65,6 +66,49 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     newFrameEvent.notify(this,frame);
 
 }
+     */
+    
+    //////////////////////////////////////////////////////////////////////////////
+    void VideoBuffer::newVideoFrame(VideoFrame & frame){
+        
+        int64_t time = frame.getTimestamp().epochMicroseconds();
+        if(microsOneSec==-1) microsOneSec=time;
+        framesOneSec++;
+        int64_t diff = time-microsOneSec;
+        if(diff>=1000000){
+            realFps = double(framesOneSec*1000000.)/double(diff);
+            framesOneSec = 0;
+            microsOneSec = time-(diff-1000000);
+        }
+        totalFrames++;
+        if(size()==0)initTime=frame.getTimestamp();
+        //timeMutex.lock();
+        
+        if (size() >= maxSize) {
+            frames[framePos] = frame;
+        }
+        else if (size() < maxSize) {
+            frames.push_back(frame);
+        }
+        
+        while(size()>maxSize){
+            frames.erase(frames.begin()+framePos);
+        }
+        //timeMutex.unlock();
+        newFrameEvent.notify(this,frame);
+        
+    }
+    
+    void VideoBuffer::iterFramePos() {
+        framePos++;
+        if (framePos > maxSize) {
+            framePos = 0;
+        }
+    }
+    
+    void VideoBuffer::setFramePos(int pos) {
+        framePos = pos;
+    }
 
 Timestamp VideoBuffer::getLastTimestamp(){
     if(size()>0)
