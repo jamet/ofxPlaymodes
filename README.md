@@ -16,7 +16,7 @@ Addons needed are:
 
 KNOWN ISSUE
 ============
-The main issue is that the audio buffer is Maxim and the Video Buffer in Playmodes are working differntly. Specifically in how new audiovisual content overwrites content in the ring buffers. 
+The main issue is that the audio buffer is Maxim and the Video Buffer in Playmodes are working differently. Specifically in how new audiovisual content overwrites content in the ring buffers. 
 
 New Audio overrights according to the current position of the recordPosition varibale in Maxim. (This is visualised in the example)
 
