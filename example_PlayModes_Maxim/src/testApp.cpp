@@ -32,8 +32,7 @@ void testApp::setup(){
     gui->addSpacer();
     gui->addToggle("Record Input", true);
     gui->addToggle("Set Position", &grainPlayer.bSetPosition);
-    gui->addSlider("Position", 0.0, 1.0, 0.0);
-    gui->addSlider("RecMix", 0.0, 1.0, &grainPlayer.recMix);
+    gui->addSlider("Position", 0.0, 1.0, 1.0);
     gui->addSlider("Volume", 0.0, 1.0, &grainPlayer.volume);
     
     
