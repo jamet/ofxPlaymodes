@@ -135,6 +135,24 @@ namespace ofxPm
  
  
 	}
+    
+    //------------------------------------------------------
+	//------------------------------------------------------
+    float avLooperRenderer::getAudioSample(int bufferSize, int nChannels){
+        int sampleIndex=0;
+		aHeader2.resetTick();
+        
+        float buffer = 0.0;
+        
+		for(int i=0;i<bufferSize;i++)
+		{
+			AudioSample aSample = aHeader2.getNextAudioSample();
+			buffer = aSample.getAudioData()[0] * aHeader2.getVolume();
+			aHeader2.updateTick();
+            
+		}
+		return buffer;
+    }
 	
 	//------------------------------------------------------
 	void avLooperRenderer::setDelayMs(float ms)

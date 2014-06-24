@@ -45,6 +45,9 @@ public:
 	void				setCrossfadeWidth(int nSamples);
 	int					getVideoOffsetInMs();
 	void				executeInOut();
+    
+    //JOSH
+    float getAudioSample(int bufferSize, int nChannels);
 	
 private:
 	VideoBuffer*		vBuffer;
