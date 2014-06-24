@@ -45,6 +45,9 @@ public:
 
 
 
+    /// JOSH CUSTOM ADDITIONS
+    int framePos;
+    int getFramePos() { return framePos; }
 
 
 	virtual void newVideoFrame(VideoFrame &frame);  // for notification of new frame event

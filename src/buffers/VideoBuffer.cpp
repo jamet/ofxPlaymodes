@@ -20,6 +20,8 @@ VideoBuffer::VideoBuffer(){
 	microsOneSec=0;
 	realFps = 0;
 	framesOneSec = 0;
+    
+    framePos = 0; // NEW VARIABLE
 }
 
 
