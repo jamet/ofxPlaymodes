@@ -27,4 +27,8 @@ The audio and visual buffers are working fundamentaly different in where new con
 
 As a result I have added my own verion of the VideoBuffer::newVideoFrame(VideoFrame &frame) method which changes the two recording buffers to behave the same but im getting quite a few artefacts sometimes. eg, frames not being properly owerwritten, also the video freezes and doesn't update on screen when recording. 
 
+Here is a screen shot of what I have hacked together... 
+
+![NewVideoFrameHack] (https://github.com/JoshuaBatty/ofxPlaymodes/blob/master/newVideoFrameHack.png)
+
 I feel like its quite close just needs some more attention. 
