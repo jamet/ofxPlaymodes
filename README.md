@@ -29,6 +29,6 @@ As a result I have added my own verion of the VideoBuffer::newVideoFrame(VideoFr
 
 Here is a screen shot of what I have hacked together... 
 
-![NewVideoFrameHack] (https://raw.githubusercontent.com/JoshuaBatty/ofxPlaymodes/blob/master/newVideoFrameHack.png)
+![NewVideoFrameHack] (https://raw.githubusercontent.com/JoshuaBatty/ofxPlaymodes/master/newVideoFrameHack.png)
 
 I feel like its quite close just needs some more attention. 
