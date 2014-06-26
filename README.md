@@ -18,7 +18,7 @@ KNOWN ISSUE
 ============
 The main issue is that the audio buffer is Maxim and the Video Buffer in Playmodes are working differently. Specifically in how new audiovisual content overwrites content in the ring buffers. 
 
-New Audio overrights according to the current position of the recordPosition varibale in Maxim. (This is visualised in the example)
+New incoming audio over writes according to the current position of the recordPosition varibale in Maxim. (This is visualised in the example)
 
 New Video Frames however are put on the very end of the buffer and the whole thing is pushed back in time to make room for the new frames. This happens in the VideoBuffer::newVideoFrame(VideoFrame &frame) method. 
 
