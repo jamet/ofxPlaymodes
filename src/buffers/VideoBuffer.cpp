@@ -68,47 +68,57 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
 }
      */
     
-    //////////////////////////////////////////////////////////////////////////////
-    void VideoBuffer::newVideoFrame(VideoFrame & frame){
-        
-        int64_t time = frame.getTimestamp().epochMicroseconds();
-        if(microsOneSec==-1) microsOneSec=time;
-        framesOneSec++;
-        int64_t diff = time-microsOneSec;
-        if(diff>=1000000){
-            realFps = double(framesOneSec*1000000.)/double(diff);
-            framesOneSec = 0;
-            microsOneSec = time-(diff-1000000);
-        }
-        totalFrames++;
-        if(size()==0)initTime=frame.getTimestamp();
-        //timeMutex.lock();
-        
-        if (size() >= maxSize) {
-            frames[framePos] = frame;
-        }
-        else if (size() < maxSize) {
-            frames.push_back(frame);
-        }
-        
-        while(size()>maxSize){
-            frames.erase(frames.begin()+framePos);
-        }
-        //timeMutex.unlock();
-        newFrameEvent.notify(this,frame);
-        
+//////////////////////////////////////////////////////////////////////////////
+void VideoBuffer::newVideoFrame(VideoFrame & frame){
+    
+    int64_t time = frame.getTimestamp().epochMicroseconds();
+    if(microsOneSec==-1) microsOneSec=time;
+    framesOneSec++;
+    int64_t diff = time-microsOneSec;
+    if(diff>=1000000){
+        realFps = double(framesOneSec*1000000.)/double(diff);
+        framesOneSec = 0;
+        microsOneSec = time-(diff-1000000);
+    }
+    totalFrames++;
+    if(size()==0)initTime=frame.getTimestamp();
+    //timeMutex.lock();
+    
+    if (size() >= maxSize) {
+        frames[framePos] = frame; // Here we use the framePos variable to specify where new frames
+                                  // should be stored in the video buffer instead of using the vector push_back call.
+    }
+    else if (size() < maxSize) {
+        frames.push_back(frame);
     }
     
-    void VideoBuffer::iterFramePos() {
-        framePos++;
-        if (framePos > maxSize) {
-            framePos = 0;
-        }
+    while(size()>maxSize){
+        frames.erase(frames.begin()+framePos);
     }
+    //timeMutex.unlock();
+    newFrameEvent.notify(this,frame);
     
-    void VideoBuffer::setFramePos(int pos) {
-        framePos = pos;
+}
+
+// This function sets the position in the videoBuffer to write new frames to
+// Is being driven by the normalized record position of the Maxi sample so the 2 are synchronised
+// Only problem is that sometimes it skips frames and old video buffers are not over written
+    
+void VideoBuffer::setFramePos(float posPerc) {
+    framePos = ofMap(posPerc, 0.0, 1.0, 0, size());
+}
+
+void VideoBuffer::setFramePos(int pos) {
+    framePos = pos;
+}
+
+void VideoBuffer::iterFramePos() {
+    framePos++;
+    if (framePos > maxSize) {
+        framePos = 0;
     }
+}
+    
 
 Timestamp VideoBuffer::getLastTimestamp(){
     if(size()>0)

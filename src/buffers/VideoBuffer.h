@@ -50,6 +50,7 @@ public:
     void iterFramePos();
     int getFramePos() { return framePos; }
     void setFramePos(int pos);
+    void setFramePos(float posPerc);
 
 	virtual void newVideoFrame(VideoFrame &frame);  // for notification of new frame event
 

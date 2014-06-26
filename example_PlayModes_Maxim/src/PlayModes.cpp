@@ -41,10 +41,10 @@ void PlayModes::setDelay(float _delay){
 //--------------------------------------------------------------
 void PlayModes::update(){
 	vGrabber.update();
-    vBuffer.iterFramePos();
+ //   vBuffer.iterFramePos();
 
-    cout << "vBuffer Size = " << vBuffer.size() << endl;
-    cout << "FramePos (perc) = " << (float)vBuffer.getFramePos() / (float)NUM_FRAMES << endl;
+ //   cout << "vBuffer Size = " << vBuffer.size() << endl;
+ //   cout << "FramePos (perc) = " << (float)vBuffer.getFramePos() / (float)NUM_FRAMES << endl;
 }
 
 //--------------------------------------------------------------
@@ -83,6 +83,8 @@ void PlayModes::drawData(){
     ofSetColor(0,0,255);
     float framePosPerc = (float)vBuffer.getFramePos() / (float)NUM_FRAMES;
     ofLine(left+ (framePosPerc * (waveformWidth-left)), top, left+ (framePosPerc * (waveformWidth-left)), top+waveformHeight);
-    ofCircle(left+(vhPos*(waveformWidth-left)), top, 10);
+    ofDrawBitmapString("FramePos", left + framePosPerc * waveformWidth-76, top+45);
+
+    ofCircle(left+(framePosPerc*(waveformWidth-left)), top, 10);
 }
 

@@ -47,6 +47,8 @@ void testApp::update(){
     playModes.update();
     grainPlayer.updatePlayHead();
     
+    playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion());
+    
     if(grainPlayer.bRecLiveInput==false){
         if(!grainPlayer.bSetPosition==true){
             playModes.setDelay(grainPlayer.ps->getNormalisedPosition());
