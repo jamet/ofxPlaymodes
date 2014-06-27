@@ -41,7 +41,7 @@ void PlayModes::setDelay(float _delay){
 //--------------------------------------------------------------
 void PlayModes::update(){
 	vGrabber.update();
- //   vBuffer.iterFramePos();
+  //  vBuffer.iterFramePos();
 
  //   cout << "vBuffer Size = " << vBuffer.size() << endl;
  //   cout << "FramePos (perc) = " << (float)vBuffer.getFramePos() / (float)NUM_FRAMES << endl;
@@ -77,7 +77,7 @@ void PlayModes::drawData(){
     ////////// Video Header Play Pos ///////////////////////
     ofSetColor(255,0,0);
     ofDrawBitmapString("Video Header Play Pos", left, top-10);
-    ofLine(left, top, waveformWidth, top);
+  //  ofLine(left, top, waveformWidth, top);
     
     // frame pos
     ofSetColor(0,0,255);

@@ -69,6 +69,7 @@ void GrainPlayer::audioReceived(float * input, int bufferSize, int nChannels)
     for (int i = 0; i < bufferSize; i++)
     {
         samp.loopRecord(input[i*nChannels], bRecLiveInput, recMix);
+        recordPosition = samp.recordPosition / (double)(LENGTH);
     }
 }
 
@@ -92,7 +93,6 @@ void GrainPlayer::audioRequested (float * output, int numFrames, int nChannels)
 
 //--------------------------------------------------------------
 float GrainPlayer::getRecordPostion(){
-    recordPosition = ofMap(samp.recordPosition, 0,LENGTH,0.0,1.0);
     return recordPosition;
 }
 

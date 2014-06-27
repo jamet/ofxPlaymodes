@@ -44,10 +44,15 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    
     playModes.update();
     grainPlayer.updatePlayHead();
     
-    playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion());
+    playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion()); //Here we use the audio record postion to
+                                                                          //set the % of the video buffer to write to
+    
+    cout << "Grain play rec pos = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
     
     if(grainPlayer.bRecLiveInput==false){
         if(!grainPlayer.bSetPosition==true){
