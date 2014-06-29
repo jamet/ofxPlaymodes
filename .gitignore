@@ -13,6 +13,5 @@ obj/
 
 .svn/
 obj/
-bin/
-build/
+bin/example_PlayModes_MaximDebug.app
 !data/
