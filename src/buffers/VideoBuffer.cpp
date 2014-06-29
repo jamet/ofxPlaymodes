@@ -113,23 +113,23 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
 void VideoBuffer::setFramePos(float posPerc) {
     static int lastVal;
     
-    float outVal = posPerc * (float)(size()-1);
-    float tempVal = floor(outVal+0.5);
+    float outVal = posPerc * (float)(size()-1);    // convert percentage to numFrames
+    float tempVal = floor(outVal+0.5);             // used to round float to next int
     
     if(tempVal==lastVal){
-        framePos = tempVal+1;
+        framePos = tempVal+1;         // If the percenatge to frames = name int as last time +1
     } else if(tempVal-lastVal==1){
-        framePos = tempVal;
+        framePos = tempVal;           // else use the rounded value
     } else {
-        framePos = outVal;
+        framePos = outVal;            // else percentage to frame converstion was correct
     }
     
-    lastVal = framePos;
+    lastVal = framePos;   // Store the last truncated integer
+}
     
     //    float perc = getLastTimestamp()-(getInitTime()+getTotalTime()*posPerc);
+    //    cout << "stupid shit " << perc << endl;
     //    cout << "Frame pos = " << (int)framePos << " -     Frame Perc = " << perc << endl;
-
-}
 
 void VideoBuffer::setFramePos(int pos) {
     framePos = pos;

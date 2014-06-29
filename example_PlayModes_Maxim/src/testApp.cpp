@@ -52,7 +52,11 @@ void testApp::update(){
     playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion()); //Here we use the audio record postion to
                                                                           //set the % of the video buffer to write to
     
-    cout << "Grain play rec pos = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
+    if(grainPlayer.bRecLiveInput==true){
+        cout << "Grain play rec pos TRUE = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
+    } else {
+        cout << "Grain play rec pos FALSE = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
+    }
     
     if(grainPlayer.bRecLiveInput==false){
         if(!grainPlayer.bSetPosition==true){
