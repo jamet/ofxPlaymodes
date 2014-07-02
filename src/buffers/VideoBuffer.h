@@ -51,6 +51,9 @@ public:
     int getFramePos() { return framePos; }
     void setFramePos(int pos);
     void setFramePos(float posPerc);
+    
+   // bool bRecord;
+
 
 	virtual void newVideoFrame(VideoFrame &frame);  // for notification of new frame event
 

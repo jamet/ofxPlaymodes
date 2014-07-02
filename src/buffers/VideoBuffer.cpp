@@ -13,6 +13,7 @@ VideoBuffer::VideoBuffer(VideoSource & source, int size) {
 }
 
 VideoBuffer::VideoBuffer(){
+    //bRecord = true;
 	source = NULL;
 	totalFrames=0;
 	stopped = false;
@@ -46,30 +47,30 @@ VideoBuffer::~VideoBuffer() {
 
 /*
 void VideoBuffer::newVideoFrame(VideoFrame & frame){
-	int64_t time = frame.getTimestamp().epochMicroseconds();
-	if(microsOneSec==-1) microsOneSec=time;
-	framesOneSec++;
-	int64_t diff = time-microsOneSec;
-	if(diff>=1000000){
-		realFps = double(framesOneSec*1000000.)/double(diff);
-		framesOneSec = 0;
-		microsOneSec = time-(diff-1000000);
-	}
+    int64_t time = frame.getTimestamp().epochMicroseconds();
+    if(microsOneSec==-1) microsOneSec=time;
+    framesOneSec++;
+    int64_t diff = time-microsOneSec;
+    if(diff>=1000000){
+        realFps = double(framesOneSec*1000000.)/double(diff);
+        framesOneSec = 0;
+        microsOneSec = time-(diff-1000000);
+    }
     totalFrames++;
     if(size()==0)initTime=frame.getTimestamp();
     //timeMutex.lock();
     
     frames.push_back(frame);
+    
     while(size()>maxSize){
         frames.erase(frames.begin());
     }
     
-    
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
-
+    
 }
- */
+*/
     
   
     
@@ -103,9 +104,8 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     }
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
-    
 }
-    
+     
 // This function sets the position in the videoBuffer to write new frames to
 // Is being driven by the normalized record position of the Maxi sample so the 2 are synchronised
 // Only problem is that sometimes it skips frames and old video buffers are not over written
@@ -126,7 +126,7 @@ void VideoBuffer::setFramePos(float posPerc) {
     
     lastVal = framePos;   // Store the last truncated integer
 }
-    
+   
     //    float perc = getLastTimestamp()-(getInitTime()+getTotalTime()*posPerc);
     //    cout << "stupid shit " << perc << endl;
     //    cout << "Frame pos = " << (int)framePos << " -     Frame Perc = " << perc << endl;

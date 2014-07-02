@@ -28,7 +28,7 @@ void VideoRate::setup(VideoSource & _source, float fps){
 	setFps(fps);
 	front = _source.getNextVideoFrame();
 	//startThread(true,false);
-	ofAddListener(ofEvents().update,this,&VideoRate::glThreadUpdate);
+	//ofAddListener(ofEvents().update,this,&VideoRate::glThreadUpdate);
 }
 
 VideoFrame VideoRate::getNextVideoFrame(){
@@ -67,16 +67,18 @@ void VideoRate::threadedFunction(){
 	}
 }
 
-void VideoRate::glThreadUpdate(ofEventArgs & args){
-	double dFrames = ofGetLastFrameTime()*fps+remainder;
-	int framesToSend = dFrames;
-	remainder = dFrames-framesToSend;
+void VideoRate::glThreadUpdate(){
+        double dFrames = ofGetLastFrameTime()*fps+remainder;
+        int framesToSend = dFrames;
+        remainder = dFrames-framesToSend;
+        if(back!=NULL){
+           // for(int i=0;i<framesToSend;i++){ // Commented out the for loop and %99 of the glitches went away
+                VideoFrame newFrame = VideoFrame::newVideoFrame(back);
+                ofNotifyEvent(newFrameEvent,newFrame);
 
-	if(back!=NULL){
-		for(int i=0;i<framesToSend;i++){
-			VideoFrame newFrame = VideoFrame::newVideoFrame(back);
-			ofNotifyEvent(newFrameEvent,newFrame);
-		}
-	}
+          //  }
+        }
+    }
 }
-}
+
+

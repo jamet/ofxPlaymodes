@@ -27,6 +27,8 @@ public:
     void draw();
     void drawData();
     
+    void recordingStatus();
+    
     void setFps(int _fps);
     void setDelay(float _delay);
 
@@ -40,5 +42,7 @@ public:
     int fps;
     int delay;
 
+    bool bRecord;
+    bool bRecordSwitch;
 
 };

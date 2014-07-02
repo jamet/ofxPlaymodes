@@ -12,6 +12,9 @@ using namespace ofxPm;
 //--------------------------------------------------------------
 void PlayModes::setup(){
 
+    bRecord = true;
+    bRecordSwitch = true;
+    
     fps = 60;
     delay = 0;
     
@@ -39,12 +42,29 @@ void PlayModes::setDelay(float _delay){
 }
 
 //--------------------------------------------------------------
-void PlayModes::update(){
-	vGrabber.update();
-  //  vBuffer.iterFramePos();
+void PlayModes::recordingStatus(){
+    if(bRecord) {
+        if(bRecordSwitch==true){
+            vBuffer.resume();
+            cout << "RESUME CUNTNESS" << endl;
+        }
+        bRecordSwitch = false;
+    } else if(bRecord==false){
+        if(bRecordSwitch==false){
+            vBuffer.stop();
+            cout << "HALT DA CUNT" << endl;
+        }
+        bRecordSwitch = true;
+    }
+}
 
- //   cout << "vBuffer Size = " << vBuffer.size() << endl;
- //   cout << "FramePos (perc) = " << (float)vBuffer.getFramePos() / (float)NUM_FRAMES << endl;
+//--------------------------------------------------------------
+void PlayModes::update(){
+    recordingStatus();
+	vGrabber.update();
+    vRate.glThreadUpdate();
+
+ 
 }
 
 //--------------------------------------------------------------
