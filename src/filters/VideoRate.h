@@ -26,7 +26,7 @@ public:
 
 protected:
     void threadedFunction();
- //   void glThreadUpdate(ofEventArgs & args);
+  //  void glThreadUpdate(ofEventArgs & args);
 
 private:
     VideoFrame back, front;

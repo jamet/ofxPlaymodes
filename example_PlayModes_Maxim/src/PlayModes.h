@@ -15,6 +15,7 @@
 #include "VideoRenderer.h"
 #include "VideoRate.h"
 #include "BasicVideoRenderer.h"
+#include "VideoMixerGPU.h"
 
 
 #define NUM_FRAMES 400
@@ -37,12 +38,14 @@ public:
     ofxPm::VideoHeader vHeader;
     ofxPm::BasicVideoRenderer vRenderer;
     ofxPm::VideoRate vRate;
+    ofxPm::VideoMixerGPU vMixer;
 
-    
     int fps;
     int delay;
 
     bool bRecord;
     bool bRecordSwitch;
+    
+    float framePosPerc;
 
 };

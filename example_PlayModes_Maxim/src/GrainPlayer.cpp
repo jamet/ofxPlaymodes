@@ -29,7 +29,7 @@ void GrainPlayer::setup(){
     recMix = 0.0;
     
     //Granular
-    speed = 0.999; // Put the play position just a tad behind the record position to prevent clicking 
+    speed = 0.98; // Put the play position just a tad behind the record position to prevent clicking
     grainSize = 0.25;
     pitch = 1.0;
     playHead = 0.0;
@@ -54,6 +54,10 @@ void GrainPlayer::updatePlayHead(){
         bUpdatePlayheadEvent = false;
     } else {
         bUpdatePlayheadEvent = true;
+    }
+    
+    if(ofGetFrameNum()==100){
+        speed = 1.0;
     }
 }
 
@@ -128,11 +132,9 @@ void GrainPlayer::drawWaveform(){
     ofDrawBitmapString("PlayHead", left + ps->getNormalisedPosition() * waveformWidth-69, top+30);
 
     // Draw Current Recording Position
-    float sampRecPerc = (float)samp.recordPosition / (float)LENGTH;
     ofSetColor(ofColor::red);
-    //recordPosition = ofMap(samp.recordPosition, 0,LENGTH,left,waveformWidth);
-    ofLine(left + sampRecPerc * waveformWidth, top, left + sampRecPerc * waveformWidth, top + waveformHeight);
-    ofDrawBitmapString("RecPos", left + sampRecPerc * waveformWidth-52, top+15);
+    ofLine(left + getRecordPostion() * waveformWidth, top, left + getRecordPostion() * waveformWidth, top + waveformHeight);
+    ofDrawBitmapString("RecPos", left + getRecordPostion() * waveformWidth-52, top+15);
 
     // draw a frame around the whole thing
     ofSetColor(ofColor::white);

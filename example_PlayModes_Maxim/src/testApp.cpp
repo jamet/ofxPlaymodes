@@ -4,7 +4,7 @@
 void testApp::setup(){
     ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
-    
+    ofSetFrameRate(60);
     playModes.setup();
     
     //AUDIO
@@ -25,7 +25,7 @@ void testApp::setup(){
     gui->addLabel("granular synthesis");
     gui->addSpacer();
     
-    gui->addSlider("Speed", -4.0, 10.0, &grainPlayer.speed);
+    gui->addSlider("Speed", -4.0, 150.0, &grainPlayer.speed);
     gui->addSlider("Pitch", 0.0, 10.0, &grainPlayer.pitch);
     gui->addSlider("GrainSize", 0.025, 0.45, &grainPlayer.grainSize);
     gui->addSlider("Overlaps", 1, 5, &grainPlayer.overlaps);
@@ -33,6 +33,7 @@ void testApp::setup(){
     gui->addToggle("Record Input", true);
     gui->addToggle("Set Position", &grainPlayer.bSetPosition);
     gui->addSlider("Position", 0.0, 1.0, 1.0);
+ //   gui->addSlider("Loop Size", 0.0 ,1.0, 0.0);
     gui->addSlider("Volume", 0.0, 1.0, &grainPlayer.volume);
     
     
@@ -46,19 +47,13 @@ void testApp::setup(){
 void testApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     
-    playModes.update();
     grainPlayer.updatePlayHead();
     
     playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion()); //Here we use the audio record postion to
                                                                           //set the % of the video buffer to write to
-  /*
-    if(grainPlayer.bRecLiveInput==true){
-        cout << "Grain play rec pos TRUE = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
-    } else {
-        cout << "Grain play rec pos FALSE = " << (float)grainPlayer.getRecordPostion() << "total Frames = " << ofGetFrameNum() << endl;
-    }
-  */
-    
+    playModes.update();
+
+
     if(grainPlayer.bRecLiveInput==false){
         if(!grainPlayer.bSetPosition==true){
             playModes.setDelay(grainPlayer.ps->getNormalisedPosition());
@@ -67,9 +62,7 @@ void testApp::update(){
     else if(grainPlayer.bRecLiveInput==true){
         playModes.setDelay(grainPlayer.ps->getNormalisedPosition());
     }
-
- 
-    cout << "BOOM SHACKALKA + " << ofGetFrameNum() << endl;
+    
 
 }
 
@@ -107,14 +100,17 @@ void testApp::guiEvent(ofxUIEventArgs &e){
 		grainPlayer.playHead = slider->getScaledValue();
         playModes.setDelay(slider->getScaledValue());
 	}
+    else if(name == "Loop Size")
+	{
+		ofxUISlider *slider = (ofxUISlider *) e.widget;
+		grainPlayer.loopSize = slider->getScaledValue();
+	}
     else if(name == "Record Input"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
         grainPlayer.bRecLiveInput = toggle->getValue();
         if(toggle->getValue()==true){
-           // playModes.vBuffer.resume();
             playModes.bRecord = true;
         } else {
-           // playModes.vBuffer.stop();
             playModes.bRecord = false;
         }
     }

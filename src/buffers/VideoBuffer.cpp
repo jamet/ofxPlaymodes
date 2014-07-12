@@ -72,8 +72,8 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
 }
 */
     
-  
-    
+
+   
 //////////////////////////////////////////////////////////////////////////////
 void VideoBuffer::newVideoFrame(VideoFrame & frame){
     
@@ -102,13 +102,16 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     while(size()>maxSize){
         frames.erase(frames.begin()+framePos);
     }
+    
+    cout << " NEW VIDEO FRAME " << endl;
+    
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
 }
+    
      
 // This function sets the position in the videoBuffer to write new frames to
 // Is being driven by the normalized record position of the Maxi sample so the 2 are synchronised
-// Only problem is that sometimes it skips frames and old video buffers are not over written
     
 void VideoBuffer::setFramePos(float posPerc) {
     static int lastVal;
@@ -118,18 +121,28 @@ void VideoBuffer::setFramePos(float posPerc) {
     
     if(tempVal==lastVal){
         framePos = tempVal+1;         // If the percenatge to frames = name int as last time +1
+        //cout << "frames Pos = " << framePos << " --- " << "lastVal = " << lastVal << " --- " << "tempVal + 1 = " << tempVal + 1;
     } else if(tempVal-lastVal==1){
         framePos = tempVal;           // else use the rounded value
+        //cout << "frames Pos = " << framePos << " --- " << "lastVal = " << lastVal << " --- " << "tempVal = " << tempVal;
     } else {
         framePos = outVal;            // else percentage to frame converstion was correct
+        //cout << "frames Pos = " << framePos << " --- " << "lastVal = " << lastVal << " --- " << "outVal = " << outVal;
     }
     
+    // If the audio rec position conversion is greater than a single frame, or if the framerate changes
+    // work out the dirreference and paste the previous frame accross to avoid all glitches :)
+    
+    int diff = ofWrap(framePos-lastVal, 0, size());
+    if(diff>1){
+        for(int i = lastVal; i < lastVal+diff; i++){
+            frames[ofWrap(i,0,size())] = frames[lastVal];
+        }
+    }
+
     lastVal = framePos;   // Store the last truncated integer
 }
-   
-    //    float perc = getLastTimestamp()-(getInitTime()+getTotalTime()*posPerc);
-    //    cout << "stupid shit " << perc << endl;
-    //    cout << "Frame pos = " << (int)framePos << " -     Frame Perc = " << perc << endl;
+
 
 void VideoBuffer::setFramePos(int pos) {
     framePos = pos;

@@ -63,8 +63,11 @@ public:
     float pitch;
     float playHead;
     float overlaps;
+    float loopSize;
+    
     
     //Drawing
     int curXpos, curYpos;
     int prevXpos, prevYpos;
+    
 };

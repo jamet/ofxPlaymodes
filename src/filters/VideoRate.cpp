@@ -60,12 +60,29 @@ void VideoRate::threadedFunction(){
 			mutexFront.unlock();
 		}
 		time = ofGetElapsedTimeMicros()-time;
-		long long sleeptime =  1000000./fps-time;
+		long long sleeptime = 1000000./fps-time;
 		if(sleeptime>0){
 			usleep(sleeptime);
 		}
 	}
 }
+
+    /*
+void VideoRate::glThreadUpdate(ofEventArgs & args){
+        double dFrames = ofGetLastFrameTime()*fps+remainder;
+        int framesToSend = dFrames;
+        remainder = dFrames-framesToSend;
+        if(back!=NULL){
+            // for(int i=0;i<framesToSend;i++){ // Commented out the for loop and %99 of the glitches went away
+            VideoFrame newFrame = VideoFrame::newVideoFrame(back);
+            ofNotifyEvent(newFrameEvent,newFrame);
+            
+            //  }
+        }
+    }
+}
+    */
+
 
 void VideoRate::glThreadUpdate(){
         double dFrames = ofGetLastFrameTime()*fps+remainder;
@@ -75,10 +92,10 @@ void VideoRate::glThreadUpdate(){
            // for(int i=0;i<framesToSend;i++){ // Commented out the for loop and %99 of the glitches went away
                 VideoFrame newFrame = VideoFrame::newVideoFrame(back);
                 ofNotifyEvent(newFrameEvent,newFrame);
-
           //  }
         }
     }
 }
+
 
 
