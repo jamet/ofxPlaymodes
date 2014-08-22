@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxUI.h"
-#include "PlayModes.h"
-#include "GrainPlayer.h"
+#include "AVGS.h"
 
 class testApp : public ofBaseApp{
 
@@ -21,18 +20,14 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-    
-        PlayModes playModes;
-        GrainPlayer grainPlayer;
+
 		
         //AUDIO
         void audioIn(float * input, int bufferSize, int nChannels);
         void audioOut(float * output, int bufferSize, int nChannels);
-        
-        int sampleRate;
-        int bufferSize;
-        ofSoundStream soundStream;
-        ofSoundMixer mixer;
+    
+        //AVGS
+        AVGS avgs;
     
         //GUI
         ofxUICanvas *gui;

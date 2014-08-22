@@ -95,15 +95,12 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
                                   // should be stored in the video buffer instead of using the vector push_back call.
     }
     else if (size() < maxSize) {
-        cout << "THIS IS FILLING UP THE VECTOR" << endl;
         frames.push_back(frame);
     }
     
     while(size()>maxSize){
         frames.erase(frames.begin()+framePos);
     }
-    
-    cout << " NEW VIDEO FRAME " << endl;
     
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
@@ -202,11 +199,23 @@ VideoFrame VideoBuffer::getVideoFrame(int position){
     //return buffer.find(times[times.size()-position])->second;
     if(size()){
         position = CLAMP(position,0,int(size())-1);
-        //cout << "frame " << position << " retained " << frames[position]->_useCountOfThisObject << "\n";
+
+        /*
+        // At the moment there is a weird jump in position when the buffers fills up for the 1st time
+        // Once it has filled up then it behaves as expected.... FIX THIS ONE DAY
+        if(size() < maxSize){
+            position = CLAMP(position,0,int(size())-1);
+            cout << "1st position = " << position << endl;
+        } else {
+            position = ofWrap(position+framePos, 0, maxSize);
+            cout << "2nd position = " << position << endl;
+        }
+*/
         return frames[position];
     }else{
         return VideoFrame();
     }
+         
 }
 
 VideoFrame VideoBuffer::getVideoFrame(float pct){
@@ -215,6 +224,7 @@ VideoFrame VideoBuffer::getVideoFrame(float pct){
 
 VideoFrame VideoBuffer::getNextVideoFrame(){
     return getVideoFrame((int)size()-1);
+//    return getVideoFrame((int)framePos);
 }
 
 long VideoBuffer::getTotalFrames(){
@@ -230,7 +240,7 @@ void VideoBuffer::draw(){
 	
     float length = (float(size())/float(maxSize))*(ofGetWidth()-(PMDRAWSPACING));
     float oneLength=(float)(ofGetWidth()-PMDRAWSPACING*2)/(float)(maxSize);
-	int drawBufferY = PMDRAWELEMENTSY+40;
+	int drawBufferY = PMDRAWELEMENTSY+108;
     if(stopped) ofSetColor(255,0,0);
 	else ofSetColor(255);
 	
@@ -252,7 +262,7 @@ void VideoBuffer::draw(){
 		{
 			ofSetLineWidth(2.0);
 			ofSetColor(255,128,0);
-			if(i!=int(size())) ofDrawBitmapString(ofToString(int(size()-i-1)),oneLength*(i)+PMDRAWSPACING + oneLength/2,PMDRAWELEMENTSY+25);
+			if(i!=int(size())) ofDrawBitmapString(ofToString(int(size()-i-1)),oneLength*(i)+PMDRAWSPACING + oneLength/2,PMDRAWELEMENTSY+98);
 			else 
 			{
 				ofSetColor(50);

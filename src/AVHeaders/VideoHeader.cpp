@@ -17,7 +17,7 @@ VideoHeader::VideoHeader(){
     fps         = 25;
     position    = 0;
     oneFrame    = (TimeDiff)round(1000000.0/(double)fps);
-    speed       = 1;
+    speed       = 1.0;
     in          = 1;
     out         = 0;
     delay       = 0;
@@ -25,7 +25,7 @@ VideoHeader::VideoHeader(){
     playing     = false;
 	loopStart	= false;
 	loopMode	= OF_LOOP_NORMAL;
-	driveMode	= 0;
+	driveMode	= 1;
 	currentPos  = 0;
 	buffer 		= NULL;
 }
@@ -38,7 +38,7 @@ void VideoHeader::setup(VideoBuffer & buffer){
     fps         = buffer.getFps();
     position    = buffer.size();
     oneFrame    = (TimeDiff)round(1000000.0/(double)fps);
-    speed       = 1;
+    speed       = 1.0;
     in          = 1;
     out         = 0;
     playing   	= false;
@@ -46,7 +46,7 @@ void VideoHeader::setup(VideoBuffer & buffer){
 	opacity		= 255;
 	loopStart	= false;
 	loopMode	= OF_LOOP_NORMAL;
-	driveMode	= 0;
+	driveMode	= 1;
 	currentPos  = 0;
 }
 
@@ -149,7 +149,11 @@ int VideoHeader::getNextPosition(){
 	int backpos;
 	int nextPos;
 	
-	switch (driveMode) 
+    int delayFrame;
+    int errorZone = 2;
+    int diff;
+
+	switch (driveMode)
 	{
 		case 0 :
 			// normal mode, based on time
@@ -243,11 +247,120 @@ int VideoHeader::getNextPosition(){
 			break;
 			
 		case 1 :
-			// position driven by audio trough calls to delay !!
+			// position driven by audio through calls to delay !!
 			oneFrame=(TimeDiff)(1000000.0/fps/1.0);
 			buffer_size=buffer->size();
 			nextPos= int(buffer_size-1) - int(double(delay)/double(oneFrame));
 			nextPos = CLAMP(nextPos,0,buffer_size-1);
+            
+            //            cout << " --- FPS = " << fps;
+            //            cout << " --- One Frame = " << oneFrame;
+            //            cout << " --- DELAY = " << delay << endl;
+            
+            /* If on top of record head
+             do - recordHead - 1;
+             if behine record head
+             stay behind
+             if infront of record head
+             stay head
+             */
+            static int lastVal;
+
+            // Make sure our plau head is incremeting properly
+            if(nextPos == lastVal) {
+                nextPos++;
+            }
+            
+            if(!buffer->isStopped()){
+                cout << "nextPos = " << nextPos << " --- " << " --- speed = " << speed;
+                
+                diff = nextPos - buffer->framePos;
+                cout << "diff = " << diff << endl;
+                
+            
+                // Check If read head is on top of record head
+                if(nextPos == buffer->framePos && speed == 1.0){
+                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+                    nextPos = buffer->framePos-1;
+                }
+                else if(nextPos == buffer->framePos && speed > 1.0){
+                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+                    nextPos = buffer->framePos+1;
+                }
+                else if(nextPos == buffer->framePos && speed < 1.0){
+                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+                    nextPos = buffer->framePos-1;
+                }
+                // Check if read head is behind record head
+                else if(diff < errorZone && nextPos < buffer->framePos && speed > 1.0){
+                    cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
+                    nextPos = buffer->framePos-1;
+                }
+                else if(diff < errorZone && nextPos < buffer->framePos && speed < 1.0){
+                    cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
+                    nextPos = nextPos;
+                }
+                // Check if read head is in front of record head
+                else if(diff < errorZone && nextPos > buffer->framePos && speed > 1.0){
+                    cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
+                    nextPos = nextPos;
+                }
+                else if(diff < errorZone && nextPos > buffer->framePos && speed < 1.0){
+                    cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
+                    nextPos = buffer->framePos+1;
+                }
+            }
+            lastVal = nextPos;
+            
+             /*
+              delayFrame = delay/oneFrame;
+              
+              cout << "Delay Frame = " << delayFrame << " --- ";
+              
+            if(nextPos - buffer->framePos >= 1 && nextPos - buffer->framePos <= 3){
+                // nextPos += 1;
+                nextPos = buffer->framePos-1;
+                cout << " --- Buffer FramePos = " << buffer->framePos;
+                cout << " --- NextPos = " << nextPos << " BOOM " << endl;
+            } else {
+                cout << " --- Buffer FramePos = " << buffer->framePos;
+                cout << " --- NextPos = " << nextPos << " NOOOOOOO " << endl;
+            }
+            
+*/
+            
+/*
+             if(nextPos == buffer->framePos){
+             nextPos += 1;
+             nextPos = buffer->framePos-1;
+             cout << " --- Buffer FramePos = " << buffer->framePos;
+             cout << " --- NextPos = " << nextPos << " BOOM " << endl;
+             } else if(nextPos - buffer->framePos == 1) {
+             nextPos -= 1;
+             nextPos = buffer->framePos-1;
+             cout << " --- Buffer FramePos = " << buffer->framePos;
+             cout << " --- NextPos = " << nextPos << " CUNT 1 " << endl;
+             } else if(nextPos - buffer->framePos == 2) {
+             nextPos -= 2;
+             nextPos = buffer->framePos-1;
+             cout << " --- Buffer FramePos = " << buffer->framePos;
+             cout << " --- NextPos = " << nextPos << " CUNT 2 " << endl;
+             } else {
+             cout << " --- Buffer FramePos = " << buffer->framePos;
+             cout << " --- NextPos = " << nextPos << endl;
+             }
+             */
+            // If nextPos = buffer->framePos
+            
+            // *Check to see the distance between the current and previous buffer->framePos
+            // if the distance is greater than 2 or 3 (speed is >1)
+            
+            /* nextPos = buffer->framePos + 1 */
+            
+            // if the distance is smaller or equal to 1 (speed is <1)
+            
+            /* nextPos = buffer->framePos - 1 */
+            
 			return nextPos;
 			
 			break;

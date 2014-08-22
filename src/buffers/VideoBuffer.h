@@ -87,6 +87,7 @@ protected:
     VideoSource* source;
 
     bool stopped;
+
     unsigned int maxSize;
     int framesOneSec;
     int64_t microsOneSec;

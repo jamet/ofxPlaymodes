@@ -51,8 +51,8 @@ void VideoMixerGPU::setup(VideoSource & _source1, VideoSource & _source2){
 	ofAddListener(source1->newFrameEvent,this,&VideoMixerGPU::newVideoFrame);
 	shader.setupShaderFromSource(GL_FRAGMENT_SHADER,fragmentMixSrc);
 	shader.linkProgram();
-
 }
+    
 
 VideoFrame VideoMixerGPU::getNextVideoFrame(){
 	return front;

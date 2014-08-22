@@ -32,6 +32,7 @@ public:
     
     void setFps(int _fps);
     void setDelay(float _delay);
+    void setSpeed(float _speed);
 
     ofxPm::VideoGrabber vGrabber;
     ofxPm::VideoBuffer vBuffer;

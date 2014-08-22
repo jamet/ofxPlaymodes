@@ -29,13 +29,13 @@ void GrainPlayer::setup(){
     recMix = 0.0;
     
     //Granular
-    speed = 0.98; // Put the play position just a tad behind the record position to prevent clicking
+    speed = 1.0;//0.98; // Put the play position just a tad behind the record position to prevent clicking
     grainSize = 0.25;
     pitch = 1.0;
     playHead = 0.0;
     overlaps = 3;
     
-    volume = 0.5;
+    volume = 0.05;
     sampleRate 	= 44100;
     bufferSize = 512;
     

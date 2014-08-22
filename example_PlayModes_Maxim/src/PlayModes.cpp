@@ -21,13 +21,13 @@ void PlayModes::setup(){
     delay = 1000;
     
 	vGrabber.initGrabber(640,480);
- 
+
 	vRate.setup(vGrabber,fps);
 	vBuffer.setup(vRate,NUM_FRAMES,true);
 	vHeader.setup(vBuffer);
 	vHeader.setDelayMs(0);
 	vRenderer.setup(vHeader);
-/*
+ /*
     vHeader.setup(vBuffer);
 	vMixer.setup(vGrabber,vHeader);
 	vRate.setup(vMixer,fps);
@@ -38,6 +38,9 @@ void PlayModes::setup(){
  */
 }
 
+void PlayModes::setSpeed(float _speed){
+    vHeader.setSpeed(_speed);
+}
 
 void PlayModes::setFps(int _fps){
     vRate.setFps(_fps);
@@ -68,10 +71,10 @@ void PlayModes::recordingStatus(){
 void PlayModes::update(){
     recordingStatus();
 	vGrabber.update();
-    vRate.glThreadUpdate();
-	vRate.setFps(fps);
-	vHeader.setFps(fps);
-	vHeader.setDelayMs(delay);
+
+//	vRate.setFps(fps);
+//	vHeader.setFps(fps);
+//	vHeader.setDelayMs(delay);
  
 }
 

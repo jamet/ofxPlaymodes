@@ -4,6 +4,7 @@
 
 #include "VideoGrabber.h"
 #include "FileGrabber.h"
+#include "TextureGrabber.h"
 #include "AudioGrabber.h"
 
 #include "AudioBuffer.h"

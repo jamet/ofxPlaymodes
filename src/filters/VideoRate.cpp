@@ -28,7 +28,7 @@ void VideoRate::setup(VideoSource & _source, float fps){
 	setFps(fps);
 	front = _source.getNextVideoFrame();
 	//startThread(true,false);
-	//ofAddListener(ofEvents().update,this,&VideoRate::glThreadUpdate);
+	ofAddListener(ofEvents().update,this,&VideoRate::glThreadUpdate);
 }
 
 VideoFrame VideoRate::getNextVideoFrame(){
@@ -67,7 +67,7 @@ void VideoRate::threadedFunction(){
 	}
 }
 
-    /*
+    
 void VideoRate::glThreadUpdate(ofEventArgs & args){
         double dFrames = ofGetLastFrameTime()*fps+remainder;
         int framesToSend = dFrames;
@@ -81,9 +81,9 @@ void VideoRate::glThreadUpdate(ofEventArgs & args){
         }
     }
 }
-    */
 
 
+/*
 void VideoRate::glThreadUpdate(){
         double dFrames = ofGetLastFrameTime()*fps+remainder;
         int framesToSend = dFrames;
@@ -96,6 +96,6 @@ void VideoRate::glThreadUpdate(){
         }
     }
 }
-
+   */
 
 

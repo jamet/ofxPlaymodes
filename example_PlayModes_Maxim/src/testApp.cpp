@@ -5,19 +5,8 @@ void testApp::setup(){
     ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
     ofSetFrameRate(60);
-    playModes.setup();
     
-    //AUDIO
-    sampleRate 	= 44100;
-    bufferSize = 512;
-    
-    grainPlayer.setup();
-    mixer.addInputFrom(&grainPlayer);
-    
-    //SoundStream
-    soundStream.listDevices();
-	soundStream.setup(this, 2, 2, sampleRate, bufferSize, 4);
-	soundStream.setOutput(this);
+    avgs.setup();
 
     //GUI
     gui = new ofxUICanvas();
@@ -25,16 +14,16 @@ void testApp::setup(){
     gui->addLabel("granular synthesis");
     gui->addSpacer();
     
-    gui->addSlider("Speed", -4.0, 150.0, &grainPlayer.speed);
-    gui->addSlider("Pitch", 0.0, 10.0, &grainPlayer.pitch);
-    gui->addSlider("GrainSize", 0.025, 0.45, &grainPlayer.grainSize);
-    gui->addSlider("Overlaps", 1, 5, &grainPlayer.overlaps);
+    gui->addSlider("Speed", -1.2, 1.8, &avgs.grainPlayer.speed);
+    gui->addSlider("Pitch", 0.0, 10.0, &avgs.grainPlayer.pitch);
+    gui->addSlider("GrainSize", 0.025, 0.45, &avgs.grainPlayer.grainSize);
+    gui->addSlider("Overlaps", 1, 5, &avgs.grainPlayer.overlaps);
     gui->addSpacer();
     gui->addToggle("Record Input", true);
-    gui->addToggle("Set Position", &grainPlayer.bSetPosition);
+    gui->addToggle("Set Position", &avgs.grainPlayer.bSetPosition);
     gui->addSlider("Position", 0.0, 1.0, 1.0);
  //   gui->addSlider("Loop Size", 0.0 ,1.0, 0.0);
-    gui->addSlider("Volume", 0.0, 1.0, &grainPlayer.volume);
+    gui->addSlider("Volume", 0.0, 1.0, &avgs.grainPlayer.volume);
     
     
     gui->autoSizeToFitWidgets();
@@ -47,46 +36,26 @@ void testApp::setup(){
 void testApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     
-    grainPlayer.updatePlayHead();
-    
-    playModes.vBuffer.setFramePos((float)grainPlayer.getRecordPostion()); //Here we use the audio record postion to
-                                                                          //set the % of the video buffer to write to
-    playModes.update();
-
-
-    if(grainPlayer.bRecLiveInput==false){
-        if(!grainPlayer.bSetPosition==true){
-            playModes.setDelay(grainPlayer.ps->getNormalisedPosition());
-        }
-    }
-    else if(grainPlayer.bRecLiveInput==true){
-        playModes.setDelay(grainPlayer.ps->getNormalisedPosition());
-    }
-    
+    avgs.update();
 
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    ofSetColor(255);
-    playModes.draw();
-    
-    grainPlayer.draw();
-    
-    playModes.drawData();
+    avgs.draw();
 }
 
 //--------------------------------------------------------------
 void testApp::audioIn(float * input, int bufferSize, int nChannels)
 {
-    grainPlayer.audioReceived(input,bufferSize,nChannels);
+    avgs.audioReceived(input,bufferSize,nChannels);
 }
 
 //--------------------------------------------------------------
 void testApp::audioOut(float * output, int bufferSize, int nChannels)
 {
-    mixer.audioRequested(output, bufferSize, nChannels);
+    avgs.audioRequested(output, bufferSize, nChannels);
 }
 
 //--------------------------------------------------------------
@@ -97,21 +66,21 @@ void testApp::guiEvent(ofxUIEventArgs &e){
     if(name == "Position")
 	{
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		grainPlayer.playHead = slider->getScaledValue();
-        playModes.setDelay(slider->getScaledValue());
+		avgs.grainPlayer.playHead = slider->getScaledValue();        
+        avgs.playModes.setDelay(slider->getScaledValue());
 	}
     else if(name == "Loop Size")
 	{
 		ofxUISlider *slider = (ofxUISlider *) e.widget;
-		grainPlayer.loopSize = slider->getScaledValue();
+		avgs.grainPlayer.loopSize = slider->getScaledValue();
 	}
     else if(name == "Record Input"){
         ofxUIToggle *toggle = (ofxUIToggle *) e.widget;
-        grainPlayer.bRecLiveInput = toggle->getValue();
+        avgs.grainPlayer.bRecLiveInput = toggle->getValue();
         if(toggle->getValue()==true){
-            playModes.bRecord = true;
+            avgs.playModes.bRecord = true;
         } else {
-            playModes.bRecord = false;
+            avgs.playModes.bRecord = false;
         }
     }
 }

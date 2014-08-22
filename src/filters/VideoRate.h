@@ -22,11 +22,11 @@ public:
 	void newVideoFrame(VideoFrame & frame);
     float getFps();
     void setFps(float fps);
-    void glThreadUpdate();
+ //   void glThreadUpdate();
 
 protected:
     void threadedFunction();
-  //  void glThreadUpdate(ofEventArgs & args);
+    void glThreadUpdate(ofEventArgs & args);
 
 private:
     VideoFrame back, front;
