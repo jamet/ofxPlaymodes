@@ -16,3 +16,4 @@ obj/
 bin/example_PlayModes_MaximDebug.app
 !data/
 example_PlayModes_Maxim_vidDelays/
+example_PlayModes_Maxim_vidDelays/src/
