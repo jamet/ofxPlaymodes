@@ -47,7 +47,7 @@ public:
 	void				executeInOut();
     
     //JOSH
-    float getAudioSample(int bufferSize, int nChannels);
+   // float getAudioSample(int bufferSize, int nChannels);
 	
 private:
 	VideoBuffer*		vBuffer;

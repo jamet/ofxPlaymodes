@@ -25,7 +25,7 @@ VideoHeader::VideoHeader(){
     playing     = false;
 	loopStart	= false;
 	loopMode	= OF_LOOP_NORMAL;
-	driveMode	= 1;
+	driveMode	= 0;
 	currentPos  = 0;
 	buffer 		= NULL;
 }
@@ -46,7 +46,7 @@ void VideoHeader::setup(VideoBuffer & buffer){
 	opacity		= 255;
 	loopStart	= false;
 	loopMode	= OF_LOOP_NORMAL;
-	driveMode	= 1;
+	driveMode	= 0;
 	currentPos  = 0;
 }
 
@@ -272,41 +272,41 @@ int VideoHeader::getNextPosition(){
             }
             
             if(!buffer->isStopped()){
-                cout << "nextPos = " << nextPos << " --- " << " --- speed = " << speed;
+      //          cout << "nextPos = " << nextPos << " --- " << " --- speed = " << speed;
                 
                 diff = nextPos - buffer->framePos;
-                cout << "diff = " << diff << endl;
+      //          cout << "diff = " << diff << endl;
                 
             
                 // Check If read head is on top of record head
                 if(nextPos == buffer->framePos && speed == 1.0){
-                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+      //              cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
                     nextPos = buffer->framePos-1;
                 }
                 else if(nextPos == buffer->framePos && speed > 1.0){
-                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+      //              cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
                     nextPos = buffer->framePos+1;
                 }
                 else if(nextPos == buffer->framePos && speed < 1.0){
-                    cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
+      //              cout << "YOUR ONTOP OF THE FUCKING RECORD HEAD!! " << endl;
                     nextPos = buffer->framePos-1;
                 }
                 // Check if read head is behind record head
                 else if(diff < errorZone && nextPos < buffer->framePos && speed > 1.0){
-                    cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
+      //              cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
                     nextPos = buffer->framePos-1;
                 }
                 else if(diff < errorZone && nextPos < buffer->framePos && speed < 1.0){
-                    cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
+      //              cout << "READ HEAD IS BEHIND THE RECORD HEAD!! " << endl;
                     nextPos = nextPos;
                 }
                 // Check if read head is in front of record head
                 else if(diff < errorZone && nextPos > buffer->framePos && speed > 1.0){
-                    cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
+      //              cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
                     nextPos = nextPos;
                 }
                 else if(diff < errorZone && nextPos > buffer->framePos && speed < 1.0){
-                    cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
+      //              cout << "READ HEAD IS INFRONT THE RECORD HEAD!! " << endl;
                     nextPos = buffer->framePos+1;
                 }
             }
@@ -543,8 +543,8 @@ void VideoHeader::setPlaying(bool isPlaying, float speed)
 		if(speed>0.0f) loopFrame = int(double(buffer->size()-1)*(in));
 		else loopFrame = int(double(buffer->size()-1)*(out));
 		int	inAbsFrame  = buffer->getTotalFrames() -  loopFrame;
-		position = inAbsFrame; 
-	}
+		position = inAbsFrame;
+    }
 	else
 	{
 		// if we're gettint out of loop mode move delay to actual position
@@ -555,7 +555,7 @@ void VideoHeader::setPlaying(bool isPlaying, float speed)
 		TimeDiff oneFrame=(TimeDiff)(1000000.0/fps/1.0);		
 		delay = (actualFrame-1)*oneFrame;
 	}
-}		
+}
 //------------------------------------------------------
 void VideoHeader::setPlaying(bool isPlaying)
 {

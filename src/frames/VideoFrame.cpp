@@ -159,7 +159,6 @@ public:
 			frame.data = pool[format].back();
 			pool[format].pop_back();
 			poolMutex.unlock();
-
 			frame.refreshTimestamp();
 			frame.getFboRef();
 			frame.data->updateTexture(videoFrame);

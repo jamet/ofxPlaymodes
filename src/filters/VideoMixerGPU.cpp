@@ -23,7 +23,6 @@ static string fragmentMixSrc =
             vec2 pos = gl_FragCoord.xy;
 
             vec4 color = vec4(texture2DRect(tex0, pos)*0.5 + texture2DRect(tex1, pos)*0.5);
-
             gl_FragColor = color;
         }
         );

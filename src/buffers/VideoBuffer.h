@@ -47,11 +47,11 @@ public:
 
     /// JOSH CUSTOM ADDITIONS
     int framePos;
+    int lastVal;
     void iterFramePos();
     int getFramePos() { return framePos; }
     void setFramePos(int pos);
     void setFramePos(float posPerc);
-    
    // bool bRecord;
 
 
@@ -71,7 +71,7 @@ public:
 	//int currentPos;                                 // currentPos in the buffer
 
 	void draw();                                    // draws the stats of the buffer
-
+    void draw(int _x, int _y, int _w, int _h);
     void stop();                                    // stop receiving new frames
     void resume();                                  // continue receiving new frames
     bool isStopped();
@@ -87,7 +87,6 @@ protected:
     VideoSource* source;
 
     bool stopped;
-
     unsigned int maxSize;
     int framesOneSec;
     int64_t microsOneSec;

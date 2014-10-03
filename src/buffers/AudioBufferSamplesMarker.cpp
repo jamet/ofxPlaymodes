@@ -48,7 +48,7 @@ namespace ofxPm
 		//this->indexMin = this->getIndex() - this->getLength();
 		//this->indexMax = this->getIndex() + this->getLength();
 				
-		printf("ABSM::setupMarker:: index %d   length %d ||Â MIN %d ||Â MAX %d \n",int(this->getIndex()),int(this->getLength()),int(this->getMin()),int(this->getMax()));
+		//printf("ABSM::setupMarker:: index %d   length %d ||ÊMIN %d ||ÊMAX %d \n",int(this->getIndex()),int(this->getLength()),int(this->getMin()),int(this->getMax()));
 	}
 
 	//------------------------------------------------------

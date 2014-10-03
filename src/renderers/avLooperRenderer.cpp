@@ -136,6 +136,7 @@ namespace ofxPm
  
 	}
     
+    /*
     //------------------------------------------------------
 	//------------------------------------------------------
     float avLooperRenderer::getAudioSample(int bufferSize, int nChannels){
@@ -153,7 +154,8 @@ namespace ofxPm
 		}
 		return buffer;
     }
-	
+	*/
+    
 	//------------------------------------------------------
 	void avLooperRenderer::setDelayMs(float ms)
 	{

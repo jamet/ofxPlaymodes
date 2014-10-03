@@ -73,11 +73,11 @@ void VideoRate::glThreadUpdate(ofEventArgs & args){
         int framesToSend = dFrames;
         remainder = dFrames-framesToSend;
         if(back!=NULL){
-            // for(int i=0;i<framesToSend;i++){ // Commented out the for loop and %99 of the glitches went away
+         //    for(int i=0;i<framesToSend;i++){ // Commented out the for loop and %99 of the glitches went away
             VideoFrame newFrame = VideoFrame::newVideoFrame(back);
             ofNotifyEvent(newFrameEvent,newFrame);
             
-            //  }
+         //     }
         }
     }
 }
