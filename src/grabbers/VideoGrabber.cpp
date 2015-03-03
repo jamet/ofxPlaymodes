@@ -16,7 +16,10 @@ VideoGrabber::~VideoGrabber(){
 
 bool VideoGrabber::initGrabber(int w, int h){
 	bool ret = ofVideoGrabber::initGrabber(w,h,false);
-	frame = VideoFrame::newVideoFrame(getPixelsRef());
+	//bool ret = ofGstVideoGrabber::setup(w, h);
+	//frame = VideoFrame::newVideoFrame(getPixelsRef());
+    frame = VideoFrame::newVideoFrame(getPixels());
+
 	return ret;
 }
 
@@ -27,7 +30,7 @@ VideoFrame VideoGrabber::getNextVideoFrame(){
 void VideoGrabber::update(){
 	ofVideoGrabber::update();
 	if(isFrameNew()){
-		newFrame(getPixelsRef());
+		newFrame(getPixels());
 	}
 }
 
@@ -41,12 +44,15 @@ void VideoGrabber::newFrame(ofPixels & pixels){
 float VideoGrabber::getFps(){
 	return fps;
 }
-	
+
 //------------------------------------------------------
 void VideoGrabber::setFps(float fps){
 	this->fps = fps;
 }
-	
+
+bool	VideoGrabber::setPixelFormat(ofPixelFormat pixelFormat){
+    return ofVideoGrabber::setPixelFormat(pixelFormat);
+}
 	;
-	
+
 }

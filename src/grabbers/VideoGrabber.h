@@ -25,8 +25,10 @@ public:
     float getFps();
 	// ugly! need to be able to override the fps of the grabber. ofVideoGrabber doesn't have a getFps !!
 	void setFps(float fps);
-	
+
     void update();
+
+    bool setPixelFormat(ofPixelFormat pixelFormat);
 
 
 
