@@ -55,4 +55,30 @@ bool	VideoGrabber::setPixelFormat(ofPixelFormat pixelFormat){
 }
 	;
 
+ofPixelFormat VideoGrabber::getPixelFormat() {
+    return ofVideoGrabber::getPixelFormat();
+}
+
+ofPixels&      VideoGrabber::getPixels(){
+    return ofVideoGrabber::getPixels();
+}
+
+void VideoGrabber::setDeviceID(int _deviceID){
+     ofVideoGrabber::setDeviceID( _deviceID);
+}
+
+ofTexture &	VideoGrabber::getTexture(){
+    return ofVideoGrabber::getTexture();
+}
+
+float VideoGrabber::getHeight() {
+    return ofVideoGrabber::getHeight();
+}
+
+float VideoGrabber::getWidth() {
+    return ofVideoGrabber::getWidth();
+}
+
+
+
 }

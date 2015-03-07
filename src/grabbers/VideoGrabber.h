@@ -30,6 +30,18 @@ public:
 
     bool setPixelFormat(ofPixelFormat pixelFormat);
 
+    ofPixelFormat 		getPixelFormat() ;
+
+    ofPixels& 			getPixels();
+		//const ofPixels&		getPixels() const;
+		void				setDeviceID(int _deviceID);
+		ofTexture &			getTexture();
+		//const ofTexture &	getTexture() const;
+		OF_DEPRECATED_MSG("Use getTexture",ofTexture &			getTextureReference());
+		//OF_DEPRECATED_MSG("Use getTexture",const ofTexture &	getTextureReference() const);
+
+    float				getHeight() ;
+	float				getWidth() ;
 
 
 
