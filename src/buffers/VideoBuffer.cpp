@@ -21,7 +21,7 @@ VideoBuffer::VideoBuffer(){
 	microsOneSec=0;
 	realFps = 0;
 	framesOneSec = 0;
-    
+
     framePos = 0; // NEW VARIABLE
     lastVal = 0;
 }
@@ -46,7 +46,7 @@ VideoBuffer::~VideoBuffer() {
 
 }
 
-    
+
    /*
 void VideoBuffer::newVideoFrame(VideoFrame & frame){
     int64_t time = frame.getTimestamp().epochMicroseconds();
@@ -61,21 +61,20 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     totalFrames++;
     if(size()==0)initTime=frame.getTimestamp();
     //timeMutex.lock();
-    
+
     frames.push_back(frame);
-    
+
     while(size()>maxSize){
         frames.erase(frames.begin());
     }
-    
+
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
-    
+
 }
  */
 //////////////////////////////////////////////////////////////////////////////
 void VideoBuffer::newVideoFrame(VideoFrame & frame){
-    
     int64_t time = frame.getTimestamp().epochMicroseconds();
     if(microsOneSec==-1) microsOneSec=time;
     framesOneSec++;
@@ -88,7 +87,7 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     totalFrames++;
     if(size()==0)initTime=frame.getTimestamp();
     //timeMutex.lock();
-    
+
     if (size() >= maxSize) {
         // THIS LINE IS GIVING ME CRASHES SOMETIMES ..... SERIOUS WTF : if i dont see this happen again its fixed
         frames[framePos] = frame; // Here we use the framePos variable to specify where new frames
@@ -97,23 +96,23 @@ void VideoBuffer::newVideoFrame(VideoFrame & frame){
     else if (size() < maxSize) {
         frames.push_back(frame);
     }
-    
+
     while(size() > maxSize){
         frames.erase(frames.begin()+framePos);
     }
-    
+
     //timeMutex.unlock();
     newFrameEvent.notify(this,frame);
 }
-    
-     
+
+
 // This function sets the position in the videoBuffer to write new frames to
 // Is being driven by the normalized record position of the Maxi sample so the 2 are synchronised
-    
+
 void VideoBuffer::setFramePos(float posPerc) {
     float outVal = posPerc * (float)(size()-1);    // convert percentage to numFrames
     float tempVal = floor(outVal+0.5);             // used to round float to next int
-    
+
     if(tempVal==lastVal){
         framePos = tempVal+1;         // If the percenatge to frames = name int as last time +1
         //cout << "frames Pos = " << framePos << " --- " << "lastVal = " << lastVal << " --- " << "tempVal + 1 = " << tempVal + 1;
@@ -124,10 +123,10 @@ void VideoBuffer::setFramePos(float posPerc) {
         framePos = outVal;            // else percentage to frame converstion was correct
         //cout << "frames Pos = " << framePos << " --- " << "lastVal = " << lastVal << " --- " << "outVal = " << outVal;
     }
-    
+
     // If the audio rec position conversion is greater than a single frame, or if the framerate changes
     // work out the dirreference and paste the previous frame accross to avoid all glitches :)
-    
+
     int diff = ofWrap(framePos-lastVal, 0, size());
     if(diff>1 && lastVal <= framePos){
         for(int i = lastVal; i < lastVal+diff; i++){
@@ -138,7 +137,7 @@ void VideoBuffer::setFramePos(float posPerc) {
     }
 
     lastVal = framePos;   // Store the last truncated integer
-    
+
 }
 
 
@@ -216,7 +215,7 @@ VideoFrame VideoBuffer::getVideoFrame(int position){
     }else{
         return VideoFrame();
     }
-         
+
 }
 
 VideoFrame VideoBuffer::getVideoFrame(float pct){
@@ -238,17 +237,17 @@ float VideoBuffer::getRealFPS(){
 
 
 void VideoBuffer::draw(){
-	
+
     float length = (float(size())/float(maxSize))*(ofGetWidth()-(PMDRAWSPACING));
     float oneLength=(float)(ofGetWidth()-PMDRAWSPACING*2)/(float)(maxSize);
 	int drawBufferY = PMDRAWELEMENTSY+108;
     if(stopped) ofSetColor(255,0,0);
 	else ofSetColor(255);
-	
+
 	ofLine(0+PMDRAWSPACING,drawBufferY,length,drawBufferY);
-	
+
 	ofSetColor(255);
-	
+
     char measureMessage[10];
     for(int i=0;i<(int)size()+1;i++){
 		/*
@@ -264,14 +263,14 @@ void VideoBuffer::draw(){
 			ofSetLineWidth(2.0);
 			ofSetColor(255,128,0);
 			if(i!=int(size())) ofDrawBitmapString(ofToString(int(size()-i-1)),oneLength*(i)+PMDRAWSPACING + oneLength/2,PMDRAWELEMENTSY+98);
-			else 
+			else
 			{
 				ofSetColor(50);
-				ofDrawBitmapString(ofToString(getTotalFrames()),oneLength*(i)+PMDRAWSPACING - 10,PMDRAWELEMENTSY+55); 
+				ofDrawBitmapString(ofToString(getTotalFrames()),oneLength*(i)+PMDRAWSPACING - 10,PMDRAWELEMENTSY+55);
 			}
 			//if(i!=int(size())) ofDrawBitmapString(ofToString(getTotalFrames()-i),ofGetWidth()-PMDRAWSPACING-(oneLength*(i+1)) + oneLength/2,drawBufferY-15);
         }
-		else 
+		else
 		{
 			ofSetLineWidth(1.0);
 			ofSetColor(155,58,0);
@@ -281,17 +280,17 @@ void VideoBuffer::draw(){
 }
 
 void VideoBuffer::draw(int _x, int _y, int _w, int _h){
-    
+
         float length = _w;
         float oneLength=(float)(ofGetWidth()-_x)/(float)(maxSize);
         int drawBufferY = _y;
         if(stopped) ofSetColor(255,0,0);
         else ofSetColor(255);
-    
+
         ofLine(_x,drawBufferY,length,drawBufferY);
-        
+
         ofSetColor(255);
-        
+
         char measureMessage[10];
         for(int i=0;i<(int)size()+1;i++){
             /*
@@ -314,7 +313,7 @@ void VideoBuffer::draw(int _x, int _y, int _w, int _h){
                 }
                 //if(i!=int(size())) ofDrawBitmapString(ofToString(getTotalFrames()-i),ofGetWidth()-PMDRAWSPACING-(oneLength*(i+1)) + oneLength/2,drawBufferY-15);
             }
-            else 
+            else
             {
                 ofSetLineWidth(1.0);
                 ofSetColor(155,58,0);
@@ -327,7 +326,7 @@ void VideoBuffer::draw(int _x, int _y, int _w, int _h){
 void VideoBuffer::stop(){
 	ofRemoveListener(source->newFrameEvent,this,&VideoBuffer::newVideoFrame);
     stopped = true;
-	
+
 }
 
 void VideoBuffer::resume(){

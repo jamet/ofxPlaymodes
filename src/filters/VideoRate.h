@@ -9,6 +9,7 @@
 #define VIDEORATE_H_
 
 #include "VideoFilter.h"
+#include "VideoGrabber.h"
 
 namespace ofxPm{
 class VideoRate: public VideoFilter, public ofThread {
@@ -17,6 +18,8 @@ public:
 	virtual ~VideoRate();
 
 	void setup(VideoSource & source, float fps=30);
+	void setup(VideoGrabber & source, float fps=30);
+
 
     VideoFrame getNextVideoFrame();
 	void newVideoFrame(VideoFrame & frame);

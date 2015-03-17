@@ -9,16 +9,18 @@
 
 namespace ofxPm{
 VideoGrabber::VideoGrabber(){
+    ofVideoGrabber();
 }
 
 VideoGrabber::~VideoGrabber(){
+    //~ofVideoGrabber();
 }
 
 bool VideoGrabber::initGrabber(int w, int h){
 	bool ret = ofVideoGrabber::initGrabber(w,h,false);
 	//bool ret = ofGstVideoGrabber::setup(w, h);
-	//frame = VideoFrame::newVideoFrame(getPixelsRef());
-    frame = VideoFrame::newVideoFrame(getPixels());
+	frame = VideoFrame::newVideoFrame(getPixelsRef());
+    //frame = VideoFrame::newVideoFrame(getPixels());
 
 	return ret;
 }
@@ -30,7 +32,7 @@ VideoFrame VideoGrabber::getNextVideoFrame(){
 void VideoGrabber::update(){
 	ofVideoGrabber::update();
 	if(isFrameNew()){
-		newFrame(getPixels());
+		newFrame(getPixelsRef());
 	}
 }
 
